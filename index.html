@@ -30,20 +30,38 @@
 <h1 align="left">Proposal</h1>
 
 <h2 align="left">Summary</h2>
-<p>We will implement remeshing for 3D meshes to retopologize them more uniformly. We will also implement constructive solid geometry capabilities. This includes using boolean operators to combine meshes (in a way that retains manifold geometry) such as addition and subtraction. 
+<p>We will implement remeshing for 3D meshes in order to retopologize the mesh more uniformly. We will also implement constructive solid geometry capabilities. This includes using boolean operators to combine meshes (in a way that retains manifold geometry) such as union and difference. Union operation combines the volume of both objects and difference subtracts the volume of the second object from the first. 
 
 <h2 align="left">Problem Description</h2>
-<p>Often, 3D models made with sculpting tools have many polygons, usually not all uniform. This makes it hard to continue sculpting since, for example, a really big face will not have any subdivisions for sculpting to affect it in any way other than just moving the entire face. Remeshing retopologizes the mesh so that it retains its geometry but has more uniform faces. After remeshing, the big face in the previous example will now be subdivided into many smaller ones but still retain its flat geometry. However, the sculptor can now sculpt on it since only some of the smaller faces will be transformed, leaving the others to still stay flat.</p>
-<p>In some cases, a sculptor may want to add new geometry instead of sculpting on a surface. Imagine having sculpted a cup but now we want a handle. The process of remeshing and pulling smaller faces out bit by bit to make a handle is a bit too tedious and even then, how would we attach our extrusion back into the cup? We could make another mesh for a handle and simply jam it in, but that results in non-manifold geometry since the faces would overlap where the handle meets the cup. This is where constructive solid geometry techniques become useful. In this case, we would want a boolean operation to add the handle to the cup and make one manifold mesh of them both.</p>
+<p>Often, 3D models made with sculpting tools have many polygons, usually not all uniform. This makes it hard to continue sculpting since, for example, a really big face will not have any subdivisions for sculpting to affect it in any way other than just moving the entire face. Remeshing retopologizes the mesh so that it retains its geometry but each face on the mesh is more uniform in both shape and area. After remeshing, the big face in the previous example will now be subdivided into many smaller ones but still retain its flat geometry. However, the sculptor can now sculpt on it since only some of the smaller faces will be transformed, leaving the others to still stay flat.</p>
+<p>In some cases, a sculptor may want to add new geometry instead of sculpting on a surface. Imagine having sculpted a cup but now we want a handle. The process of remeshing and pulling smaller faces out bit by bit to make a handle is a very tedious. Even if we extrude the in dividual faces, how would we attach our extrusion back into the cup? We could make another mesh for a handle and simply jam it in. However, this results in non-manifold geometry since faces would overlap where the handle meets the cup. This is where constructive solid geometry techniques become useful. Constructive solid geometry allows us to create complex object models by conducting Boolean operations on primitives. For the cup example, we would want to conduct the union boolean operations to add the handle's mesh to the cup's mesh, making one manifold mesh of a cup with a handle.</p>
 <!-- <p>Remesh, boolean addition, boolean subtraaction</p>
  -->
 
 <h2 align="left">Goals and Deliverables</h2>
 <h3 align="left">1. What we plan to deliver</h2>
-<p>We plan to implement remeshing and an addition boolean operation for constructive solid geometry. For remeshing, we hope to end up with a more uniform mesh that still retains much of its geometry. We will have a demo of a mesh with many little faces and one big one. After remeshing, the faces should be relatively uniform and the the ones where the original big face should have been should be flat, retaining the geometry of the original mesh. For the addition boolean, we will have a demo of two meshes currently jammed together (non-manifold) and perform the addition boolean. After that, the meshes should become one without intersecting faces. This can be shown by cutting it open. </p>
-<h3 align="left">2. What we hope to deliver</h2>
-<p>We hope to implement a subtraction boolean operation for constructive solid geometry. To choose which mesh gets subtracted from which, we may hope to have an interactive element to choose. We can demo this by subtracting a cylinder from a square, resulting in a square with a round hole through it.</p>
+<p>We plan to implement remeshing and addition boolean operation for constructive solid geometry. For remeshing, we hope to end up with a more uniform mesh that still retains much of its geometry. We will have a demo of a mesh with many faces with small area and one face with significantly larger area. After remeshing, the mesh's faces should appear uniform in both shape and area. The original large faceg face should still maintain it's geometry (flat in this case). For the union boolean, we will present a demo starting with two primitive meshes currently jammed together (non-manifold) and perform the union boolean. The two meshes should combine into one mesh with no intersecting faces. We will show this by splitting the mesh open to see the inside of the mesh. </p>
+<div align="center">
+  <table>
+    <tr>
+      <td>
+        <img src="images/proposal_remesh_shape.png" width="480px">
+        <figcaption>Remeshing Illustration</figcaption>
+      </td>
+      <td>
+        <img src="images/proposal_union_cubeSphere.png" width="480px">
+        <figcaption>Boolean Difference/Subtraction Example</figcaption>
+      </td>
+    </tr>
+  </table>  
+</div>
 
+<h3 align="left">2. What we hope to deliver</h2>
+<p>We hope to implement a difference boolean operation for constructive solid geometry. We hope to implement an interactive interface to choose the mesh that is subtracted from (between the two in the scene). We can demo this by subtracting a cylinder from a cube, resulting in a cube with a round hole through it.</p>
+<div align="center">
+  <img src="images/proposal_subtraction_cubeCylinder.png" width="60%">
+  <figcaption>Boolean Difference/Subtraction Example</figcaption>
+</div>
 <h2 align="left">Schedule</h2>
 <h3 align="left">Week 1</h2>
   <p>Set-up and Remeshing</p>
