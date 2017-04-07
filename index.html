@@ -22,14 +22,15 @@
 <body>
 
 <h1 align="middle">CS 184: Computer Graphics and Imaging, Spring 2017</h1>
-<h1 align="middle">Final Project: Remeshing
+<h1 align="middle">Final Project: Remeshing and Constructive Solid Geometry
 </h1>
 <h2 align="middle">Isabel Zhang (cs184-abe), Vi Le (cs184-aaf)</h2>
 
 <div>
+<h1 align="left">Proposal</h1>
 
 <h2 align="left">Summary</h2>
-<p>We will implement remeshing for 3D meshes to retopologize them more uniformly. We will also implement constructive solid geometry capabilities. This includes using boolean operators to combine meshes (in a way that retains manifold geometry) such as addition and substraction. 
+<p>We will implement remeshing for 3D meshes to retopologize them more uniformly. We will also implement constructive solid geometry capabilities. This includes using boolean operators to combine meshes (in a way that retains manifold geometry) such as addition and subtraction. 
 
 <h2 align="left">Problem Description</h2>
 <p>Often, 3D models made with sculpting tools have many polygons, usually not all uniform. This makes it hard to continue sculpting since, for example, a really big face will not have any subdivisions for sculpting to affect it in any way other than just moving the entire face. Remeshing retopologizes the mesh so that it retains its geometry but has more uniform faces. After remeshing, the big face in the previous example will now be subdivided into many smaller ones but still retain its flat geometry. However, the sculptor can now sculpt on it since only some of the smaller faces will be transformed, leaving the others to still stay flat.</p>
@@ -39,7 +40,7 @@
 
 <h2 align="left">Goals and Deliverables</h2>
 <h3 align="left">1. What we plan to deliver</h2>
-<p>We plan to implement remeshing and an addition boolean operation for constructive solid geometry. For resmeshing, we hope to end up with a more uniform mesh that still retains much of its geometry. We will have a demo of a mesh with many little faces and one big one. After remeshing, the faces should be relatively uniform and the the ones where the original big face should have been should be flat, retaining the geometry of the original mesh. For the addition boolean, we will have a demo of two meshes currently jammed together (non-manifold) and perform the addition boolean. After that, the meshes should become one without intersecting faces. This can be shown by cutting it open. </p>
+<p>We plan to implement remeshing and an addition boolean operation for constructive solid geometry. For remeshing, we hope to end up with a more uniform mesh that still retains much of its geometry. We will have a demo of a mesh with many little faces and one big one. After remeshing, the faces should be relatively uniform and the the ones where the original big face should have been should be flat, retaining the geometry of the original mesh. For the addition boolean, we will have a demo of two meshes currently jammed together (non-manifold) and perform the addition boolean. After that, the meshes should become one without intersecting faces. This can be shown by cutting it open. </p>
 <h3 align="left">2. What we hope to deliver</h2>
 <p>We hope to implement a subtraction boolean operation for constructive solid geometry. To choose which mesh gets subtracted from which, we may hope to have an interactive element to choose. We can demo this by subtracting a cylinder from a square, resulting in a square with a round hole through it.</p>
 
@@ -75,8 +76,8 @@
 <p>http://www.cs.jhu.edu/~misha/ReadingSeminar/Papers/Huang07b.pdf</p>
 <p>http://stackoverflow.com/questions/2002976/constructive-solid-geometry-mesh</p>
 
-<p>Isotropic remeshing </p>
-<p>http://graphics.stanford.edu/courses/cs468-12-spring/LectureSlides/13_Remeshing1.pdf</p>
+<!-- <p>Isotropic remeshing </p>
+ --><p>http://graphics.stanford.edu/courses/cs468-12-spring/LectureSlides/13_Remeshing1.pdf</p>
 
 <!-- <div align="left">
   <table style="width=100%">
