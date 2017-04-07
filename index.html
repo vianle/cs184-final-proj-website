@@ -28,20 +28,34 @@
 
 <div>
 
+<h2 align="middle">Summary</h2>
+<p>We will implement remeshing for 3D meshes to retopologize them more uniformly. We will also implement constructive solid geometry capabilities. This includes using boolean operators to combine meshes (in a way that retains mainfold geometry) such as addition and substraction. 
 
-<h2 align="middle">Overview</h2>
-<p>Remesh, boolean addition, boolean subtraaction</p>
+<h2 align="middle">Problem Description</h2>
+<p>Often, 3D models made with sculpting tools have many polygons, usually not all uniform. This makes it hard to continue sculpting since, for example, a really big face will not have any subdivisions for sculpting to affect it in any way other than just moving the entire face. Remeshing retopologizes the mesh so that it retains its geometry but has more uniform faces. After remeshing, the big face in the previous example will now be subdivided into many smaller ones but still retain its flat geometry. However, the sculptor can now sculpt on it since only some of the smaller faces will be transformed, leaving the others to still stay flat.</p>
+<p>In some cases, a sculptor may want to add new geometry instead of sculpting on a surface. Imagine having sculpted a cup but now we want handles. The process of remeshing and pulling smaller faces out bit by bit to make a handle is a bit too tedious and even then, how would we attach our extrusion back into the cup? We could make another mesh for a handle and simply jam it in, but that results in non-manifold geometry since the faces would overlap where the handle meets the cup. This is where constructive solid geometry techniques become useful. In this case, we would want a boolean operation to add the handle to the cup and make one manifold mesh of them both.</p>
+<!-- <p>Remesh, boolean addition, boolean subtraaction</p>
+ -->
 
+<h2 align="middle">Problem Description</h2>
+<p></p>
+
+<h2 align="middle">Goals and Deliverables</h2>
+<p>We plan to accomplish remeshing and an additive boolean for our meshes. </p>
+<h3 align="middle">1. What we plan to deliver</h2>
+<p>We plan to implement remeshing and an addition boolean operation for constructive solid geometry.</p>
+<h3 align="middle">2. What we hope to deliver</h2>
+<p>We hope to implement a subtraction boolean operation for constructive solid geometry.</p>
 
 <h2 align="middle">Schedule</h2>
 <h3 align="middle">Week 1</h2>
-  <p>Set-up, Remeshing</p>
+  <p>Set-up and Remeshing</p>
 <h3 align="middle">Week 2</h2>
   <p>Remeshing</p>
 <h3 align="middle">Week 3</h2>
-  <p>Addition</p>
+  <p>Addition Boolean Operation</p>
 <h3 align="middle">Week 4</h2>
-  <p>Subtraction</p>
+  <p>Subtraction Boolean Operation</p>
 
 <!-- 
 <div align="middle">
