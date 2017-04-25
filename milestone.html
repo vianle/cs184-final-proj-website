@@ -33,7 +33,7 @@
 <p>The first two weeks of this project is dedicated to implementing remeshing for meshes with non-uniform and/or over-complicated topology. We implemented a remeshing method (without complete edge collapse) that retopologized the input mesh to be more uniform. We were also able to implement the ability to interact with the input mesh(es) on screen as an easier way to test future constructive solid geometry operations. We also implemented an edge-collapse method that is mostly effective. </p>
 
 <h2 align="left">Problems we currently face</h2>
-<p>The current edge-collapse implementation causes segmentation faults in continued iterations of remeshing (second iteration on cube.dae and first iteration on teapot.dae). Edge-collapse alone causes segmentation fault on certain edge collapse orders for cube.dae but does not seem to cause segmentation faults on other more complicated meshes.</p>
+<p>The current edge-collapse implementation sometimes causes segmentation faults in continued iterations of remeshing.</p>
 
 <h2 align="left">Preliminary Results</h2>
 <div align="center">
