@@ -36,6 +36,63 @@
 <p>The current edge-collapse implementation causes segmentation faults in continued iterations of remeshing (second iteration on cube.dae and first iteration on teapot.dae). Edge-collapse alone causes segmentation fault on certain edge collapse orders for cube.dae but does not seem to cause segmentation faults on other more complicated meshes.</p>
 
 <h2 align="left">Preliminary Results</h2>
+<div align="center">
+  <table>
+    <tr>
+      <td>
+        <img src="images/milestone/peter.png" width="480px">
+        <figcaption align="center">Original mesh</figcaption>
+      </td>
+      <td>
+        <img src="images/milestone/peter2.png" width="480px">
+        <figcaption align="center">After one iteration of remesh without collapse</figcaption>
+      </td>
+    </tr>
+  </table>  
+</div>
+<br>
+<div align="center">
+  <table>
+    <tr>
+      <td>
+        <img src="images/milestone/teapot.png" width="480px">
+        <figcaption align="center">Original mesh</figcaption>
+      </td>
+      <td>
+        <img src="images/milestone/teapot2.png" width="480px">
+        <figcaption align="center">After collapsing 4 edges</figcaption>
+      </td>
+    </tr>
+  </table>  
+</div>
+<br>
+<div align="center">
+  <table>
+    <tr>
+      <td>
+        <img src="images/milestone/mesha.png" width="480px">
+        <figcaption align="center" >Select mesh A</figcaption>
+      </td>
+      <td>
+        <img src="images/milestone/meshb.png" width="480px">
+        <figcaption align="center">Select mesh B</figcaption>
+      </td>
+    </tr>
+  </table>  
+</div>
+<br>
+<div align="center">
+  <table>
+    <tr>
+      <td>
+        <img src="images/milestone/objectselect.gif" width="800px">
+        <figcaption align="center">Object selection and moving</figcaption>
+      </td>
+    </tr>
+  </table>  
+</div>
+
+
 <h2 align="left">Progress Reflection</h2>
 <p>We have stayed generally on track for our milestone due date. The main issue we face now is the partially effective edge-collapse method. However, we implemented the UI interaction portion from Week 4 ahead of time. We hope that this will help us stay on track despite the issues with edge-collapse. </p>
 
