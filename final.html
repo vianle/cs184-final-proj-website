@@ -76,7 +76,7 @@
     </p>
     <p>
       <b>Edge splits </b>require the addition of new mesh elements as we are increasing the number of triangles within the overall mesh. In total, we added 2 faces, 3 edges, 1 vertex and 6 halfedges for each edge that was split. We then rereferenced all neighboring pointers to reflect the addition of the new elements.<br>
-      <b>Edge collapse </b> required the deletion of existing mesh elements as we are decreasing the number of triangles within the overall mesh. For a given edge collapse, we delete 2 faces, 3 edges, 1 vertex, and 6 halfedges. We then reassigned neighboring pointers to reflect the deletion of old mesh elements.<br>
+      <b>Edge collapse </b> required the deletion of existing mesh elements as we are decreasing the number of triangles within the overall mesh. For a given edge collapse, we delete 2 faces, 3 edges, 1 vertex, and 6 halfedges. We then reassigned neighboring pointers to reflect the deletion of old mesh elements. We also had to check for cases where we don't collapse the edge, such as when it resulted in a flipped triangle or a double plane.<br>
       <b>Edge flip </b>required many pointer reassignments. 
     </p>
 
@@ -104,7 +104,7 @@
 
   <h3>Problems We Faced</h3>
   <p>
-    This section was the most frustrating part of the project. Our mesh is represented explicitly while most of the papers that we were referencing 
+    This section was the most frustrating part of the project. Our mesh is represented explicitly while most of the papers that we were referencing. We spent the longest time figuring out that the boundary faces didn't work as described in the project 2 spec since calling the vertex of the next halfedge would result in a segfault. We ended up just finding the boundary vertices and working with that instead. We also had problems with implementing the bridge precisely because of this lack of ordered traversal. We took many approaches to create our own list to traverse and to store new boundary edges we've created. Ultimately, we ended up bridging by growing our triangles with the nearest vertex since intersecting meshes, after deleting the intersection, would have vertices that were very close to each other.
   </p>
 
 <hr width="65%">
@@ -335,8 +335,10 @@
 
 
 <h2 align="center">Contributions</h2>
-<p>Vi: I worked on the implementation of the remeshing algorithm. (VI DO THIS PART??????CSG, Simplification, UI, etc.)</p>
+<p>Vi: I worked on the implementation of the remeshing and simplification algorithm. I also worked on the check for cases where the edges shouldn't be collapsed. For constructive solid geometry, I worked on implementing UI functions like moving the whole object by clicking and dragging as well as selecting meshes as mesh A and mesh B. I've also made a the bridging function between the boundary edges of two different meshes for the latter part of the union operation. I provided visuals for the writeup, slides, and videos. </p>
 <p>Isabel: I worked on part of the remeshing segment of the project, particularly the edge-collapse method. I also attempted to implement intersection detection for the union boolean operation with bounding boxes. Additionally, I assembled the milestone and final videos, the slide decks for the milestone and final, as well as the websites for the milestone and final due dates.</p>
+<p>Disclaimer: Simplification was not initially in our proposal but we decided it may help balance the two meshes before boolean operations. Also, it was a last ditch effort to save our grade since we had the functions we needed from implemented remesh. </p>
+
 <hr width="100%">
 <h2 align="center">Past Presentations/Videos</h2>
 <a href="https://www.youtube.com/watch?v=f6-_4JrViRE">Final Presentation Video</a>
