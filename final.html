@@ -1,0 +1,177 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<style>
+  body {
+    padding: 100px;
+    width: 1000px;
+    margin: auto;
+    text-align: left;
+    font-weight: 300;
+    font-family: 'Open Sans', sans-serif;
+    color: #121212;
+  }
+  h1, h2, h3, h4 {
+    font-family: 'Source Sans Pro', sans-serif;
+  }
+</style>
+<title>CS 184 Final Project Report</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link href="https://fonts.googleapis.com/css?family=Open+Sans|Source+Sans+Pro" rel="stylesheet">
+</head>
+<body>
+
+<h1 align="middle">CS 184: Computer Graphics and Imaging, Spring 2017</h1>
+<h1 align="middle">Final Project: Remeshing, Simplification, and Constructive Solid Geometry
+</h1>
+<h2 align="middle">Isabel Zhang (cs184-abe), Vi Le (cs184-aaf)</h2>
+
+<div>
+<h1 align="left">Final Project Proposal</h1>
+
+<h2 align="center">Project Overview</h2>
+<p>In this project, we implemented common geometric processing operations like mesh regularization (remeshing) and mesh simplification. Additionally, we worked on the union boolean operation for constructive solid geometry to join two separate meshes together into one mesh while maintaining their volumes. </p>
+
+<h2 align="center">Implementation</h2>
+<h3>Isotropic Remeshing</h3>
+  <p>
+    Often with free-form sculpting, meshes may contain many faces of different sizes which can lead to artifacts when undergoing other geometric processing operations. With isotropic remeshing, we aim to regularize mesh topology to contain triangles with greater uniformity in size and shape. Because we used an explicit representation for our mesh, we implemented the remeshing algorithm from Botsch & Kobbelt's paper: <a href="http://www.lsi.upc.edu/~pere/PapersWeb/SGI/Kobbelt2.pdf">A Remeshing Approach to Multiresolution Modeling"</a> for our project. 
+  </p>
+  <p>
+    We iterate through all the halfedge elements within the mesh and: 
+    <ul>
+      <li>Split all edges at their midpoint if the edges are longer than 4/3rds of target length (in our case, the average edge length: calculated by first iterating over all the edges and and averaging the lengths)</li>
+      <li>Collapsed edges that were less than 4/5ths mean edge length</li>
+      <li>Flipped edges to improve vertex degrees (improvement shown with smaller deviations from valence of 6 for all vertices)</li>!!CHECK OWN IMPLEMENTATION
+      <li>Tangentially smoothed surfaces via vertex relocation</li>
+  </p>
+  <p>
+    <b>Edge splits </b>require the addition of new mesh elements as we are increasing the number of triangles within the overall mesh. In total, we added 2 faces, 3 edges, 1 vertex and 6 halfedges for each edge that was split. We then rereferenced all neighboring pointers to reflect the addition of the new elements.<br>
+    <b>Edge collapse </b> required the deletion of existing mesh elements as we are decreasing the number of triangles within the overall mesh. For a given edge collapse, we delete 2 faces, 3 edges, 1 vertex, and 6 halfedges. We then reassigned neighboring pointers to reflect the deletion of old mesh elements.<br>
+    <b>Edge flip </b>required many pointer reassignments. 
+  </p>
+<h3 align="middle">Results</h3>
+<p>Note that the triangles become more uniform in shape with each iteration. A stark difference can be seen in the triangles at the back of Peter's head between Fig. 1 and Fig. 2. By Fig. 5, the triangles take on uniform shape and size. 
+<table>
+  <tr>
+    <td>
+      <img src="images/milestone/peterblue.png" width=480px>
+      <figcaption align="center">Fig. 1: Original Mesh</figcaption>
+    </td>
+    <td>
+      <img src="images/milestone/peterblue2.png" width=480px>
+      <figcaption align="center">Fig. 2: 2 iterations of remesh</figcaption>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <img src="images/milestone/peterblue3.png" width=480px>
+      <figcaption align="center">Fig. 3: 3 iterations of remesh</figcaption>
+    </td>
+    <td>
+      <img src="images/milestone/peterblue4.png" width=480px>
+      <figcaption align="center">Fig. 4: 4 iterations of remesh</figcaption>
+    </td>
+  </tr>
+</table>
+<div align="center">
+  <img src="images/milestone/peterblue7.png" width=480px>
+  <figcaption align="center">Fig. 5: 7 iterations of remesh</figcaption>
+</div>
+<br>
+<h3>Constructive Solid Geometry: Union</h3>
+
+<br>
+<h3>Mesh Simplification</h3>
+
+
+<p>The current edge-collapse implementation sometimes causes segmentation faults in continued iterations of remeshing.</p>
+
+<h2 align="left">Preliminary Results</h2>
+<div align="center">
+<!-- <iframe width="560" height="315" src="https://www.youtube.com/embed/xQbJMNgJSFU" frameborder="0" allowfullscreen> Without edge collapse</iframe> -->
+<iframe width="560" height="315" src="https://www.youtube.com/embed/5G_U7at4Y38" frameborder="0" allowfullscreen></iframe>
+</div>
+<br></br>
+
+<a href="https://docs.google.com/a/berkeley.edu/presentation/d/1rcjg3UMeoB3WYiugZ1kypV_m9j8dtSP6Yk1M7R33rUY/edit?usp=sharing"><h3 align="left">Here are the slides</h1></a>
+
+
+<div align="center">
+  <table>
+    <tr>
+      <td>
+        <img src="images/milestone/peter.png" width="480px">
+        <figcaption align="center">Original mesh</figcaption>
+      </td>
+      <td>
+        <img src="images/milestone/peter2.png" width="480px">
+        <figcaption align="center">After one iteration of remesh without collapse</figcaption>
+      </td>
+    </tr>
+  </table>  
+</div>
+<br>
+<div align="center">
+  <table>
+    <tr>
+      <td>
+        <img src="images/milestone/teapot.png" width="480px">
+        <figcaption align="center">Original mesh</figcaption>
+      </td>
+      <td>
+        <img src="images/milestone/teapot2.png" width="480px">
+        <figcaption align="center">After collapsing 4 edges</figcaption>
+      </td>
+    </tr>
+  </table>  
+</div>
+<br>
+<div align="center">
+  <table>
+    <tr>
+      <td>
+        <img src="images/milestone/mesha.png" width="480px">
+        <figcaption align="center" >Select mesh A</figcaption>
+      </td>
+      <td>
+        <img src="images/milestone/meshb.png" width="480px">
+        <figcaption align="center">Select mesh B</figcaption>
+      </td>
+    </tr>
+  </table>  
+</div>
+<br>
+<div align="center">
+  <table>
+    <tr>
+      <td>
+        <img src="images/milestone/objectselect.gif" width="800px">
+        <figcaption align="center">Object selection and moving</figcaption>
+      </td>
+    </tr>
+  </table>  
+</div>
+<br>
+
+<h2 align="left">Progress Reflection</h2>
+<p>We have stayed generally on track for our milestone due date. The main issue we face now is the partially effective edge-collapse method. However, we implemented the UI interaction portion from Week 4 ahead of time. We hope that this will help us stay on track despite the issues with edge-collapse. </p>
+
+<h2 align="left">Updated Work Plan</h2>
+<h3 align="left">Week 3</h2>
+  <p>Debug edge-collapse with the help of office hours
+</p>
+  <p>Begin union operation for constructive solid geometry
+</p>
+<h3 align="left">Week 4</h2>
+  <p>Finish up union operation for constructive solid geometry 
+</p>
+  <p>Reach goals to do intersection and difference operations</p> 
+
+</div>
+</body>
+</html>
+
+
+
+
