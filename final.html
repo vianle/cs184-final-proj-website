@@ -78,6 +78,35 @@
     <img src="images/milestone/peterblue7.png" width=480px>
     <figcaption align="center">Fig. 5: 7 iterations of remesh</figcaption>
   </div>
+  </p>
+
+  <p>Note that the large triangles on the extruded face of Fig 6. diminishes in area each iteration of remesh. The triangles become more uniform in area as well as shape.  
+  <table>
+    <tr>
+      <td>
+        <img src="images/presentation/box1.png" width=480px>
+        <figcaption align="center">Fig. 6: Original Mesh</figcaption>
+      </td>
+      <td>
+        <img src="images/presentation/box2.png" width=480px>
+        <figcaption align="center">Fig. 7: 1 iterations of remesh</figcaption>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <img src="images/presentation/box3.png" width=480px>
+        <figcaption align="center">Fig. 8: 2 iterations of remesh</figcaption>
+      </td>
+      <td>
+        <img src="images/presentation/box4.png" width=480px>
+        <figcaption align="center">Fig. 9: 3 iterations of remesh</figcaption>
+      </td>
+    </tr>
+  </table>
+  <div align="center">
+    <img src="images/presentation/box5.png" width=480px>
+    <figcaption align="center">Fig. 10: Different angle</figcaption>
+  </div>
 </p>
 <hr width="65%">
 
@@ -87,6 +116,10 @@
   <p>
     To set up this operation, we implemented UI interaction with the meshes. By toggling "O", we can select the entire object and move it on screen. Our implementation of the union operation requires strict ordering of meshes. To conduct this operation: select the first mesh and hit "A", then select the second mesh and hit "B", and finally hit "+" or "=" to add the two elements together. 
   </p>
+  <div align="center">
+    <img src="images/milestone/objectselect.gif" width=600px align="center">
+    <figcaption align="center">UI Interaction: Using object selection to move meshes</figcaption>
+  </div>
   <p>
     We read a variety of papers on how to implement this section, however, most papers represent meshes implicitly. Because we represent the mesh explicitly, we had to find our own method.  
   </p>
