@@ -26,31 +26,66 @@
 </h1>
 <h2 align="middle">Isabel Zhang (cs184-abe), Vi Le (cs184-aaf)</h2>
 
+
+
+
+
+
+
+
+
+
+
+
+
 <div>
 <hr width="100%">
 <h2 align="center">Abstract</h2>
 <p>In this project, we implemented common geometric processing operations like mesh regularization (remeshing) and mesh simplification. Additionally, we worked on the union boolean operation for constructive solid geometry to join two separate meshes together into one mesh while maintaining their volumes. </p>
 <hr width=100%>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <h2 align="center">Technical Approach</h2>
 <h3>Isotropic Remeshing</h3>
   <p>
     Often with free-form sculpting, meshes may contain many faces of different sizes which can lead to artifacts when undergoing other geometric processing operations. With isotropic remeshing, we aim to regularize mesh topology to contain triangles with greater uniformity in size and shape. Because we used an explicit representation for our mesh, we implemented the remeshing algorithm from Botsch & Kobbelt's paper: <a href="http://www.lsi.upc.edu/~pere/PapersWeb/SGI/Kobbelt2.pdf">A Remeshing Approach to Multiresolution Modeling"</a> for our project. 
   </p>
-  <p>
-    We iterate through all the halfedge elements within the mesh and: 
-    <ul>
-      <li>Split all edges at their midpoint if the edges are longer than 4/3rds of target length (in our case, the average edge length: calculated by first iterating over all the edges and and averaging the lengths)</li>
-      <li>Collapsed edges that were less than 4/5ths mean edge length</li>
-      <li>Flipped edges to improve vertex degrees (improvement shown with smaller deviations from valence of 6 for all vertices)</li>
-      <li>Tangentially smoothed surfaces via vertex relocation</li>
-    </ul>
-  </p>
-  <p>
-    <b>Edge splits </b>require the addition of new mesh elements as we are increasing the number of triangles within the overall mesh. In total, we added 2 faces, 3 edges, 1 vertex and 6 halfedges for each edge that was split. We then rereferenced all neighboring pointers to reflect the addition of the new elements.<br>
-    <b>Edge collapse </b> required the deletion of existing mesh elements as we are decreasing the number of triangles within the overall mesh. For a given edge collapse, we delete 2 faces, 3 edges, 1 vertex, and 6 halfedges. We then reassigned neighboring pointers to reflect the deletion of old mesh elements.<br>
-    <b>Edge flip </b>required many pointer reassignments. 
-  </p>
+  <h3>Our Implementation</h3>
+    <p>
+      We iterate through all the halfedge elements within the mesh and: 
+      <ul>
+        <li>Split all edges at their midpoint if the edges are longer than 4/3rds of target length (in our case, the average edge length: calculated by first iterating over all the edges and and averaging the lengths)</li>
+        <li>Collapsed edges that were less than 4/5ths mean edge length</li>
+        <li>Flipped edges to improve vertex degrees (improvement shown with smaller deviations from valence of 6 for all vertices)</li>
+        <li>Tangentially smoothed surfaces via vertex relocation</li>
+      </ul>
+    </p>
+    <p>
+      <b>Edge splits </b>require the addition of new mesh elements as we are increasing the number of triangles within the overall mesh. In total, we added 2 faces, 3 edges, 1 vertex and 6 halfedges for each edge that was split. We then rereferenced all neighboring pointers to reflect the addition of the new elements.<br>
+      <b>Edge collapse </b> required the deletion of existing mesh elements as we are decreasing the number of triangles within the overall mesh. For a given edge collapse, we delete 2 faces, 3 edges, 1 vertex, and 6 halfedges. We then reassigned neighboring pointers to reflect the deletion of old mesh elements.<br>
+      <b>Edge flip </b>required many pointer reassignments. 
+    </p>
+
+  <h3>Problems We Faced</h3>
+    <p>
+      Edge collapse caused alot of issues for us as it behaved as expected when used by itself, however, it caused the program to segfault during remeshing. We believed the method was not correctly deleting mesh elements from their respective lists. In the end, we realized we were not reassigning pointers correctly as the "base case" that we were using was too complicated. After fixing the reassignment issue within edge-collapse, our program no longer segfaulted upon remeshing. (????)
+    </p>
+
+  <h3>Lessons Learned</h3>
 <hr width="65%">
 
 <!-- Next Section -->
@@ -67,6 +102,11 @@
     Given two input meshes (meshA and meshB), we output one mesh that is the union of the two meshes. First, we add all the boundary vertices of meshA and meshB to individual lists. We then bridge these vertices together by creating triangles between two boundary vertices from meshA and the closest boundary vertex from meshB. Then, we build another triangle using two boundary vertices from meshB (one of which is from the first triangle) and a boundary vertex from meshA. We do this for all boundary vertices of meshA and meshB. Next, we add the nonboundary faces of meshA and meshB to the polymesh by creating triangles with the three vertices of each face. Then, we merge all the vertices of the polymesh. Finally, we delete meshA and meshB and return our newly built mesh.
   </p>
 
+  <h3>Problems We Faced</h3>
+  <p>
+    This section was the most frustrating part of the project. Our mesh is represented explicitly while most of the papers that we were referencing 
+  </p>
+
 <hr width="65%">
 
 <!-- Next Section -->
@@ -77,6 +117,19 @@
   <p>
   First, we iterate through all the faces of the mesh and calculate each face's quadric error matrix which represents the distance between the face's normal and the face's vertex(??).  Next, we set the quadric of the vertices by summing the quadric error of all faces surrounding the vertex. Then, we set the quadric error of the edges by summing the quadric error of both of the edge's vertices. We continue by finding the point along the edge that minimizes the quadric error and collapse edges with the smallest cost. 
   </p>
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -218,6 +271,27 @@
     </p>
 
 <hr width="100%">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <h2 align="center">References</h2>
 <h3>Isotropic Remeshing Resources:</h3>
   <p>
@@ -244,6 +318,22 @@
   </p>
 
 <hr width="100%">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <h2 align="center">Contributions</h2>
 <p>Vi: I worked on the implementation of the remeshing algorithm. (VI DO THIS PART??????CSG, Simplification, UI, etc.)</p>
 <p>Isabel: I worked on part of the remeshing segment of the project, particularly the edge-collapse method. I also attempted to implement intersection detection for the union boolean operation with bounding boxes. Additionally, I assembled the milestone and final videos, the slide decks for the milestone and final, as well as the websites for the milestone and final due dates.</p>
