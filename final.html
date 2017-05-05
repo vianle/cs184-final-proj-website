@@ -82,7 +82,7 @@
 
   <h3>Problems We Faced</h3>
     <p>
-      Edge collapse caused alot of issues for us as it behaved as expected when used by itself, however, it caused the program to segfault during remeshing. We believed the method was not correctly deleting mesh elements from their respective lists. In the end, we realized we were not reassigning pointers correctly as the "base case" that we were using was too complicated. After fixing the reassignment issue within edge-collapse, our program no longer segfaulted upon remeshing. (????)
+      Edge collapse caused alot of issues for us as it behaved as expected when used by itself, however, it caused the program to segfault during remeshing. We believed the method was not correctly deleting mesh elements from their respective lists. In the end, we realized we were not reassigning pointers correctly as the "base case" that we were using was too complicated. After fixing the pointer reassignment issue within edge-collapse, our program no longer segfaulted upon remeshing. (????)
     </p>
 
   <h3>Lessons Learned</h3>
@@ -104,7 +104,11 @@
 
   <h3>Problems We Faced</h3>
   <p>
-    This section was the most frustrating part of the project. Our mesh is represented explicitly while most of the papers that we were referencing 
+    This section was the most frustrating part of the project. Our mesh is represented explicitly while most of the papers that we read used implicit representations for their meshes. We could not find many relevant resources on boolean operations for explicit mesh representations. We attended office hours and spoke to Ren who mentioned the necessity of intersection detection. We attempted to implement intersection detection: first, we found bounding boxes for the two input meshes (meshA & meshB). Next, we looped through all vertices of the two meshes and checked if they were within the opposing mesh's bounding box. We added all vertices that were in the other mesh's bounding box to an <code>intersection</code> list and all non-intersecting vertices into a <code>non-intersecting</code> list. The non-intersecting elements were then added to a new polymesh and the output was returned. The idea for this method was to return a mesh with no intersections and bridge the remaining vertices that potentially intersected with the other mesh. However, we ran into several issues:
+    <ul>
+      <li>The mesh disappeared entirely upon execution of the union operation. This bug was fixed by changing the way we inserted polygons into the polymesh output. </li>
+      <li>The program segfaulted upon union operation. This bug is persistent and returns as a memory reallocation issue.</li>
+    </ul>
   </p>
 
 <hr width="65%">
@@ -211,10 +215,10 @@
 
 <hr width="67%">
 
-  <h3 align="center">Union Operation and 2 Iterations of remeshing/subdivision(???IS IT REMESHING OR SUBDIVISION) Results </h3>
+  <h3 align="center">Union Operation and 2 Iterations of subdivision Results </h3>
   <div align="center">
     <img src="images/finalReport/bridge2.gif" width=600px align="center">
-    <figcaption align="center">Union operation and 2 iterations of remeshing/subdivision (?????)</figcaption>
+    <figcaption align="center">Union operation and 2 iterations of subdivision </figcaption>
   </div>
 
 <hr width="67%">
