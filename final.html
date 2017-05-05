@@ -27,10 +27,10 @@
 <h2 align="middle">Isabel Zhang (cs184-abe), Vi Le (cs184-aaf)</h2>
 
 <div>
-<h1 align="left">Final Project Proposal</h1>
-
+<hr width="100%">
 <h2 align="center">Project Overview</h2>
 <p>In this project, we implemented common geometric processing operations like mesh regularization (remeshing) and mesh simplification. Additionally, we worked on the union boolean operation for constructive solid geometry to join two separate meshes together into one mesh while maintaining their volumes. </p>
+<hr width=100%>
 
 <h2 align="center">Implementation</h2>
 <h3>Isotropic Remeshing</h3>
@@ -51,37 +51,54 @@
     <b>Edge flip </b>required many pointer reassignments. 
   </p>
 <h3 align="middle">Results</h3>
-<p>Note that the triangles become more uniform in shape with each iteration. A stark difference can be seen in the triangles at the back of Peter's head between Fig. 1 and Fig. 2. By Fig. 5, the triangles take on uniform shape and size. 
-<table>
-  <tr>
-    <td>
-      <img src="images/milestone/peterblue.png" width=480px>
-      <figcaption align="center">Fig. 1: Original Mesh</figcaption>
-    </td>
-    <td>
-      <img src="images/milestone/peterblue2.png" width=480px>
-      <figcaption align="center">Fig. 2: 2 iterations of remesh</figcaption>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <img src="images/milestone/peterblue3.png" width=480px>
-      <figcaption align="center">Fig. 3: 3 iterations of remesh</figcaption>
-    </td>
-    <td>
-      <img src="images/milestone/peterblue4.png" width=480px>
-      <figcaption align="center">Fig. 4: 4 iterations of remesh</figcaption>
-    </td>
-  </tr>
-</table>
-<div align="center">
-  <img src="images/milestone/peterblue7.png" width=480px>
-  <figcaption align="center">Fig. 5: 7 iterations of remesh</figcaption>
-</div>
-<br>
-<h3>Constructive Solid Geometry: Union</h3>
+  <p>Note that the triangles become more uniform in shape with each iteration. A stark difference can be seen in the triangles at the back of Peter's head between Fig. 1 and Fig. 2. By Fig. 5, the triangles take on uniform shape and size. 
+  <table>
+    <tr>
+      <td>
+        <img src="images/milestone/peterblue.png" width=480px>
+        <figcaption align="center">Fig. 1: Original Mesh</figcaption>
+      </td>
+      <td>
+        <img src="images/milestone/peterblue2.png" width=480px>
+        <figcaption align="center">Fig. 2: 2 iterations of remesh</figcaption>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <img src="images/milestone/peterblue3.png" width=480px>
+        <figcaption align="center">Fig. 3: 3 iterations of remesh</figcaption>
+      </td>
+      <td>
+        <img src="images/milestone/peterblue4.png" width=480px>
+        <figcaption align="center">Fig. 4: 4 iterations of remesh</figcaption>
+      </td>
+    </tr>
+  </table>
+  <div align="center">
+    <img src="images/milestone/peterblue7.png" width=480px>
+    <figcaption align="center">Fig. 5: 7 iterations of remesh</figcaption>
+  </div>
+</p>
+<hr width="65%">
 
-<br>
+<!-- Next Section -->
+
+<h3>Constructive Solid Geometry: Union</h3>
+  <p>
+    To set up this operation, we implemented UI interaction with the meshes. By toggling "O", we can select the entire object and move it on screen. Our implementation of the union operation requires strict ordering of meshes. To conduct this operation: select the first mesh and hit "A", then select the second mesh and hit "B", and finally hit "+" or "=" to add the two elements together. 
+  </p>
+  <p>
+    We read a variety of papers on how to implement this section, however, most papers represent meshes implicitly. Because we represent the mesh explicitly, we had to find our own method.  
+  </p>
+  <p>
+    Given two input meshes (meshA and meshB), we output one mesh that is the union of the two meshes. First, we add all the boundary vertices of meshA and meshB to individual lists. We then bridge these vertices together by creating triangles between two boundary vertices from meshA and the closest boundary vertex from meshB. Then, we build another triangle using two boundary vertices from meshB (one of which is from the first triangle) and a boundary vertex from meshA. We do this for all boundary vertices of meshA and meshB. Next, we add the nonboundary faces of meshA and meshB to the polymesh by creating triangles with the three vertices of each face. Then, we merge all the vertices of the polymesh. Finally, we delete meshA and meshB and return our newly built mesh.
+  </p>
+  <h3 align="Center">Results</h3>
+  <div align="center">
+    <img src="images/finalReport/bridge2.gif" width=600px align="center">
+    <figcaption align="center">Union operation and 2 iterations of remeshing/subdivision (?????)</figcaption>
+  </div>
+<hr width="65%">
 <h3>Mesh Simplification</h3>
 
 
