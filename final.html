@@ -75,9 +75,8 @@
       </ul>
     </p>
     <p>
-      <b>Edge splits </b>require the addition of new mesh elements as we are increasing the number of triangles within the overall mesh. In total, we added 2 faces, 3 edges, 1 vertex and 6 halfedges for each edge that was split. We then rereferenced all neighboring pointers to reflect the addition of the new elements.<br>
       <b>Edge collapse </b> required the deletion of existing mesh elements as we are decreasing the number of triangles within the overall mesh. For a given edge collapse, we delete 2 faces, 3 edges, 1 vertex, and 6 halfedges. We then reassigned neighboring pointers to reflect the deletion of old mesh elements. We also had to check for cases where we don't collapse the edge, such as when it resulted in a flipped triangle or a double plane.<br>
-      <b>Edge flip </b>required many pointer reassignments. 
+      <b>Edge flip</b> & <b>edge split</b> implementation was completed in project 2. 
     </p>
 
   <h3>Problems We Faced</h3>
@@ -317,7 +316,7 @@
 <h3>Mesh Simplification Resources:</h3>
   <p>
     <ul>
-      <li><a href="http://cseweb.ucsd.edu/~ravir/190/2016/garland97.pdf">Garland & Heckbert's Surface Simplification Using Quadric Error Metrics</a></li>
+      <li><a href="http://cseweb.ucsd.edu/~ravir/190/2016/garland97.pdf">Garland & Heckbert's Surface Simplification Using Quadric Error Metrics Algorithm</a></li>
       <li><a href=""></a></li>
     </ul>
   </p>
@@ -345,11 +344,20 @@
 <p>Disclaimer: Simplification was not initially in our proposal but we decided it may help balance the two meshes before boolean operations. Also, it was a last ditch effort to save our grade since we had the functions we needed from implemented remesh. </p>
 
 <hr width="100%">
-<h2 align="center">Past Presentations/Videos</h2>
-<a href="https://www.youtube.com/watch?v=f6-_4JrViRE">Final Presentation Video</a>
-<a href="https://docs.google.com/a/berkeley.edu/presentation/d/1wxPgU0KzNCgDrys4l72mWxF8QDAfEIIpjv0Bfp44RkY/edit?usp=sharing">Final Presentation Slide Deck</a>
-<a href="https://www.youtube.com/watch?v=5G_U7at4Y38">Milestone Video</a>
-<a href="https://docs.google.com/a/berkeley.edu/presentation/d/1rcjg3UMeoB3WYiugZ1kypV_m9j8dtSP6Yk1M7R33rUY/edit?usp=sharing">Milestone Presentation Slide Deck</a>
+<h2 align="center">Past Presentations</h2>
+<ul>
+  <li><a href="https://docs.google.com/a/berkeley.edu/presentation/d/1wxPgU0KzNCgDrys4l72mWxF8QDAfEIIpjv0Bfp44RkY/edit?usp=sharing">Final Presentation Slide Deck</a></li>
+  <li><a href="https://docs.google.com/a/berkeley.edu/presentation/d/1rcjg3UMeoB3WYiugZ1kypV_m9j8dtSP6Yk1M7R33rUY/edit?usp=sharing">Milestone Presentation Slide Deck</a></li>
+</ul>
+
+
+
+<hr width="100%">
+
+<h2 align="center">Past Videos</h2>
+<iframe width="1020" height="630" src="https://www.youtube.com/embed/f6-_4JrViRE" frameborder="0" allowfullscreen></iframe>
+<iframe width="1020" height="630" src="https://www.youtube.com/embed/5G_U7at4Y38" frameborder="0" allowfullscreen></iframe>
+
 
 </div>
 </body>
