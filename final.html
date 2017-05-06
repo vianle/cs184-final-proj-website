@@ -29,42 +29,24 @@
 
 
 
-
-
-
-
-
-
-
-
-
 <div>
-<hr width="100%">
-<h2 align="center">Abstract</h2>
-<p>In this project, we implemented common geometric processing operations like mesh regularization (remeshing) and mesh simplification. Additionally, we worked on the union boolean operation for constructive solid geometry to join two separate meshes together into one mesh while maintaining their volumes. </p>
-<hr width=100%>
+<hr size="10" color="gray" width=100%>
+<h2 align="center"><b>Abstract</b></h2>
+<p>This project focuses mainly on mesh manipulation and geometric processing. We implemented common geometric processing operations like mesh regularization (isotropic remeshing) and mesh simplification. We also worked to implement the union boolean operation for constructive solid geometry. The goal was to join two input meshes into one output mesh while maintaining the input mesh volumes. </p>
+<br>
+<hr size="10" color="gray" width=100%>
 
 
 
 
+<h2 align="center"><b>Technical Approach</b></h2>
+<hr width="65%" size=2 color="gray">
 
-
-
-
-
-
-
-
-
-
-
-
-<h2 align="center">Technical Approach</h2>
-<h3>Isotropic Remeshing</h3>
+<h3><u>Isotropic Remeshing</u></h3>
   <p>
-    Often with free-form sculpting, meshes may contain many faces of different sizes which can lead to artifacts when undergoing other geometric processing operations. With isotropic remeshing, we aim to regularize mesh topology to contain triangles with greater uniformity in size and shape. Because we used an explicit representation for our mesh, we implemented the remeshing algorithm from Botsch & Kobbelt's paper: <a href="http://www.lsi.upc.edu/~pere/PapersWeb/SGI/Kobbelt2.pdf">A Remeshing Approach to Multiresolution Modeling"</a> for our project. 
+    Often with free-form sculpting, meshes may contain many faces of different sizes which can lead to artifacts when undergoing other geometric processing operations. With isotropic remeshing, we aim to regularize mesh topology to contain triangles with greater uniformity in size and shape. Because we used an explicit representation for our mesh, we implemented the remeshing algorithm from Botsch & Kobbelt's paper: <a href="http://www.lsi.upc.edu/~pere/PapersWeb/SGI/Kobbelt2.pdf">A Remeshing Approach to Multiresolution Modeling"</a> for our project. Our implementation did not stray far from the algorithm details from the paper.
   </p>
-  <h3>Our Implementation</h3>
+  <h3 align="center">Implementing Edge Collapse and Remesh</h3>
     <p>
       We iterate through all the halfedge elements within the mesh and: 
       <ul>
@@ -75,68 +57,80 @@
       </ul>
     </p>
     <p>
-      <b>Edge collapse </b> required the deletion of existing mesh elements as we are decreasing the number of triangles within the overall mesh. For a given edge collapse, we delete 2 faces, 3 edges, 1 vertex, and 6 halfedges. We then reassigned neighboring pointers to reflect the deletion of old mesh elements. We also had to check for cases where we don't collapse the edge, such as when it resulted in a flipped triangle or a double plane.<br>
-      <b>Edge flip</b> & <b>edge split</b> implementation was completed in project 2. 
+      <b>Edge flip</b> & <b>edge split</b> implementation was completed in Project 2. 
+      <br>
+      <b>Edge collapse </b> required the deletion of existing mesh elements as we are decreasing the number of triangles within the overall mesh. For a given edge collapse, we delete 2 faces, 3 edges, 1 vertex, and 6 halfedges. We then reassigned neighboring pointers to reflect the deletion of old mesh elements. We also had to check for cases where we don't collapse the edge, such as when it resulted in a flipped triangle or a double plane.
+      <br>
+      <div align="center">
+        <img src="images/milestone_collapseEdge_diagram.PNG" width=480px align="center">
+      </div>
     </p>
 
-  <h3>Problems We Faced</h3>
+  <h3 align="center">Problems We Faced</h3>
     <p>
-      Edge collapse caused alot of issues for us as it behaved as expected when used by itself, however, it caused the program to segfault during remeshing. We believed the method was not correctly deleting mesh elements from their respective lists. In the end, we realized we were not reassigning pointers correctly as the "base case" that we were using was too complicated. After fixing the pointer reassignment issue within edge-collapse, our program no longer segfaulted upon remeshing. (????)
-    </p>
-
-  <h3>Lessons Learned</h3>
-<hr width="65%">
+      Edge collapse caused alot of issues for us as it behaved as expected when used by itself, however, it caused the program to segfault during remeshing. We believed the method was not correctly deleting mesh elements from their respective lists. In the end, we realized that we were not reassigning pointers correctly as our "base case" was too complicated. After fixing the pointer reassignment issue within edge-collapse, our program no longer segfaulted upon remeshing.
+<br>
+<hr width="65%" size=2 color="gray">
 
 <!-- Next Section -->
 
-<h3>Constructive Solid Geometry: Union</h3>
+<h3><u>Constructive Solid Geometry: Union</u></h3>
   <p>
     To set up this operation, we implemented UI interaction with the meshes. By toggling "O", we can select the entire object and move it on screen. Our implementation of the union operation requires strict ordering of meshes. To conduct this operation: select the first mesh and hit "A", then select the second mesh and hit "B", and finally hit "+" or "=" to add the two elements together. 
   </p>
   
   <p>
-    We read a variety of papers on how to implement this section, however, most papers represent meshes implicitly. Because we represent the mesh explicitly, we had to find our own method. At a high level, we would find the intersections of the two meshes, delete the intersections, and then bridge the boundary faces left over from deleteing the intersections.
+    We read a variety of papers on how to implement this section. However, most papers discuss implicit mesh representations. Because we represent the mesh explicitly, we had very few papers to refer to and decided to devise our own method. At a high level, we would find the intersections of the two meshes, delete the intersections, and bridge the boundary faces left over from deleting the intersections. Because we did not follow any particular paper for this method, our union algorithm is more or less unique.
   </p>
   <p>
-    Since we would be working with merging two meshes and the boundaries couldn't be traversed as expected, we decided to work with the polymesh and mesh nodes instead of the halfedge data structure.
-    Given two input meshes (meshA and meshB), we output one mesh that is the union of the two meshes. First, we find the intersections between meshA and meshB, delete the faces that are within the intersection, and put them into a polymesh. Then, we add all the boundary vertices of meshA and meshB to individual lists. We then bridge these vertices together by creating triangles between two boundary vertices from meshA and the closest boundary vertex from meshB. Then, we build another triangle using two boundary vertices from meshB (one of which is from the first triangle) and a boundary vertex from meshA. We do this for all boundary vertices of meshA and meshB. Next, we add the nonboundary faces of meshA and meshB to the polymesh by creating triangles with the three vertices of each face. Then, we merge all the vertices of the polymesh. Finally, we delete meshA and meshB and return our newly built mesh.
+    Since our implementation merges two meshes with unordered boundary traversal, we decided to work with the polymesh and mesh nodes instead of the halfedge data structure.
+    Given two input meshes (<i>meshA</i> and <i>meshB</i>), we output one mesh that is the union of the two meshes. First, we find the intersections between <i>meshA</i> and <i>meshB</i>, delete the faces that are within the intersection, and put them into a polymesh. Then, we add all the boundary vertices of <i>meshA</i> and <i>meshB</i> to individual lists. We then bridge these vertices together by creating triangles between two boundary vertices from <i>meshA</i> and the closest boundary vertex from <i>meshB</i>. Then, we build another triangle using two boundary vertices from <i>meshB</i> (one of which is from the first triangle) and a boundary vertex from <i>meshA</i>. We do this for all boundary vertices of <i>meshA</i> and <i>meshB</i>. Next, we add the nonboundary faces of <i>meshA</i> and <i>meshB</i> to the polymesh by creating triangles with the three vertices of each face. Then, we merge all the vertices of the polymesh. Finally, we delete <i>meshA</i> and <i>meshB</i> and return our newly built mesh.
   </p>
 
-  <h3>Problems We Faced</h3>
+  <h3 align="center">Problems We Faced</h3>
   <p>
-    This section was the most frustrating part of the project. We spent the longest time figuring out that the boundary faces didn't work as described in the project 2 spec since calling the vertex of the next halfedge would result in a segfault. We ended up just finding the boundary vertices and working with that instead. We also had problems with implementing the bridge precisely because of this lack of ordered traversal. We took many approaches to create our own list to traverse and to store new boundary edges we've created. Ultimately, we ended up bridging by growing our triangles with the nearest vertex since intersecting meshes, after deleting the intersection, would have vertices that were very close to each other. Our mesh is represented explicitly while most of the papers that we read used implicit representations for their meshes. We could not find many relevant resources on boolean operations for explicit mesh representations. We attended office hours and spoke to Ren who mentioned the necessity of intersection detection. We attempted to implement intersection detection: first, we found bounding boxes for the two input meshes (meshA & meshB). Next, we looped through all vertices of the two meshes and checked if they were within the opposing mesh's bounding box. We added all vertices that were in the other mesh's bounding box to an <code>intersection</code> list and all non-intersecting vertices into a <code>non-intersecting</code> list. The non-intersecting elements were then added to a new polymesh and the output was returned. The idea for this method was to return a mesh with no intersections and bridge the remaining vertices that potentially intersected with the other mesh. However, we ran into several issues:
-    <ul>
-      <li>The mesh disappeared entirely upon execution of the union operation. This bug was fixed by changing the way we inserted polygons into the polymesh output. </li>
-      <li>The program segfaulted upon union operation. This bug is persistent and returns as a memory reallocation issue.</li>
-    </ul>
+    This section was the most frustrating part of the project and we encountered two problems: intersection detection & boundary faces. 
+  </p>
+  <p>
+    As discussed above, we used an explicit mesh representation while most papers discuss implicit mesh representations for constructive solid geometry. Because of this, we could not find many relevant resources on boolean operations for explicit mesh representations. We attended office hours and spoke to Ren who mentioned the necessity of intersection detection. 
+
+    Following his advice, we attempted to implement intersection detection: 
+    <ol>
+
+      <li>First, we found bounding boxes for the two input meshes (meshA & meshB) by iterating through each individual mesh and tracking the minimum and maximum vertex positions in all three dimensions.</li>
+      <li>Next, we looped through all vertices of the two meshes and checked if they were within the opposing mesh's bounding box. We added all vertices that were in the other mesh's bounding box to an <code>intersection</code> list and all non-intersecting vertices into a <code>non-intersecting</code> list.  </li>
+      <li>Finally, the non-intersecting elements were added to a new polymesh and returned.</li>
+    </ol>
+      The idea for this method was to return a polymesh with no intersections and bridge the remaining vertices that potentially intersected with the other mesh. However, the mesh currently segfaults upon execution of the union operation. This bug is persistent and returns as a memory reallocation issue.
+
+    
+  </p>
+  <p>
+    We spent a long time trying to work with boundary faces. However, we found that boundary faces do not work as described in the Project 2 spec as calling the vertex of the next halfedge resulted in a segfault. We decided to work with boundary vertices instead. Due to the lack of ordered traversal, we had trouble implementing the bridging method precisely. We implemented a couple different methods to create our own list for storing and traversing newly created boundary edges. Upon deleting the intersection, the two meshes will have vertices that are very close to each other. Ultimately, we ended up bridging the vertices together by growing our triangles with the nearest vertex of the intersecting meshes.  
 
   </p>
-
-<hr width="65%">
+<br>
+<hr width="65%" size=2 color="gray">
 
 <!-- Next Section -->
-<h3>Mesh Simplification</h3>
+<h3><u>Mesh Simplification</u></h3>
   <p>
-    Mesh simplification is especially useful in cases where high resolution meshes are unnecessary or computationally expensive to process. By simplifying the mesh and decreasing the number of polygons within a mesh, the operation aims to increase efficiency while maintaining quality similar to the input mesh. This helps with boolean operations in the case that the two meshes we want to boolean are not similar enough in terms of the number of faces near the intersection. We used Garland & Heckbert's paper on <a href="http://cseweb.ucsd.edu/~ravir/190/2016/garland97.pdf">Surface Simplification Using Quadric Error Metrics</a> algorithm for our simplification implementation. 
+    Mesh simplification is especially useful in cases where high resolution meshes are unnecessary or computationally expensive to process. By simplifying the mesh and decreasing the number of polygons within a mesh, the operation aims to increase efficiency while maintaining quality similar to the input mesh. This helps with boolean operations in the case that the two meshes we want to boolean are not similar enough in terms of the number of faces near the intersection. We used Garland & Heckbert's paper on <a href="http://cseweb.ucsd.edu/~ravir/190/2016/garland97.pdf">Surface Simplification Using Quadric Error Metrics</a> algorithm for our simplification implementation. Once again, we followed the algorithm from the paper pretty closely.
   </p>
   <p>
   First, we iterate through all the faces of the mesh and calculate each face's quadric error matrix which can be used to calculate the distance between the face and a point. Next, we set the quadric of the vertices by summing the quadric error of all faces surrounding the vertex. Then, we set the quadric error of the edges by summing the quadric error of both of the edge's vertices. We continue by finding the point along the edge that minimizes the quadric error and collapse edges with the smallest cost. After collapsing 20% of the triangles present in the mesh, we stop. Finally, we go back and sum up the vertex's quadric error matrix again because the neighbors have now changed as well as the neighboring edges' quadric error matrices.
   </p>
-  <h3>Problems We Faced</h3>
+  <h3 align="center">Problems We Faced</h3>
   <p>There were virtually no problems here as most of our problems were with collapsing in the remesh algorithm.</p>
 
-
-
-
-
-
-
-
-
-
-
-
-
+<hr width="80%" size=5 color="gray">
+  <h3 align="center">Lessons We Learned</h3>
+  <ul>
+    <li>To implement UI interaction and manipulate on screen elements</li>
+    <li>Appreciate how well scaffolded the projects were as remeshing and simplification were straightforward with methods implemented in Project 2</li>
+    <li>To use previously learned topics for non-intended purpose (ex: bounding boxes for raytracing was used for intersection detection)</li>
+    <li>To better scope out projects (we didn't realize the different mesh representations incongruities until midway through remeshing)</li> 
+  </ul>
 
 
 
@@ -144,10 +138,12 @@
 
 
 
+<br>
+<hr size="10" color="gray" width=100%>
+<h2 align="center">Results</h2>
+<hr width="65%" size=2 color="gray">
 
-<hr width="100%">
-<h3 align="center">Results</h3>
-<h3 align="middle">Isotropic Remeshing Results</h3>
+<h3 align="middle"><u>Isotropic Remeshing Results</u></h3>
   <p>Note that the triangles become more uniform in shape with each iteration. A stark difference can be seen in the triangles at the back of Peter's head between Fig. 1 and Fig. 2. By Fig. 5, the triangles take on uniform shape and size. 
   <table>
     <tr>
@@ -206,26 +202,26 @@
   </div>
 </p>
 
-<hr width="67%">
+<hr width="65%" size=2 color="gray">
 
 
-<h3 align="Center">UI Interaction Results</h3>
+<h3 align="Center"><u>UI Interaction Results</u></h3>
   <div align="center">
     <img src="images/milestone/objectselect.gif" width=600px align="center">
     <figcaption align="center">UI Interaction: Using object selection to move meshes</figcaption>
   </div>
 
-<hr width="67%">
+<hr width="65%" size=2 color="gray">
 
-  <h3 align="center">Union Operation and 2 Iterations of subdivision Results </h3>
+  <h3 align="center"><u>Union Operation and 2 Iterations of subdivision Results </u></h3>
   <div align="center">
     <img src="images/finalReport/bridge2.gif" width=600px align="center">
     <figcaption align="center">Union operation and 2 iterations of subdivision </figcaption>
   </div>
 
-<hr width="67%">
+<hr width="65%" size=2 color="gray">
 
-  <h3 align="center">Mesh Simplification Results</h3>
+  <h3 align="center"><u>Mesh Simplification Results</u></h3>
     <p>
       Note that Peter maintains his relative shape while decreasing the number of polygons on his face. This makes geometric processing more efficient overall as quality is not sacrificed for efficiency.  
       <table>
@@ -275,21 +271,8 @@
         <figcaption align="center">4 iterations of simplification</figcaption>
       </div>
     </p>
-
-<hr width="100%">
-
-
-
-
-
-
-
-
-
-
-
-
-
+<br>
+<hr size="10" color="gray" width=100%>
 
 
 
@@ -299,11 +282,12 @@
 
 
 <h2 align="center">References</h2>
+<hr width="65%" size=2 color="gray">
+
 <h3>Isotropic Remeshing Resources:</h3>
   <p>
     <ul>
       <li><a href="http://www.lsi.upc.edu/~pere/PapersWeb/SGI/Kobbelt2.pdf">Botsch & Kobbelt's Isotropic Remeshing Algorithm</a></li>
-      <li><a href=""></a></li>
     </ul>
   </p>
 
@@ -311,7 +295,7 @@
   <p>
     <ul>
       <li><a href="https://www.ics.uci.edu/~eppstein/pubs/Epp-TR-92-87.pdf">Speedups in Constructive Solid Geometry</a>: used for intersection detection</li>
-      <li><a href=""></a></li>
+      <li><a href="http://www.cs.columbia.edu/cg/mesh-arrangements/mesh-arrangements-for-solid-geometry-siggraph-2016-zhou-et-al.pdf">Mesh Arrangements for Solid Geometry</a></li>
     </ul>
   </p>
 
@@ -319,47 +303,57 @@
   <p>
     <ul>
       <li><a href="http://cseweb.ucsd.edu/~ravir/190/2016/garland97.pdf">Garland & Heckbert's Surface Simplification Using Quadric Error Metrics Algorithm</a></li>
-      <li><a href=""></a></li>
     </ul>
   </p>
 
-<hr width="100%">
-
-
-
-
-
-
-
-
-
-
-
+<hr size="10" color="gray" width=100%>
 
 
 
 
 
 <h2 align="center">Contributions</h2>
-<p>Vi: I worked on the implementation of the remeshing and simplification algorithm. I also worked on the check for cases where the edges shouldn't be collapsed. For constructive solid geometry, I worked on implementing UI functions like moving the whole object by clicking and dragging as well as selecting meshes as mesh A and mesh B. I've also made a the bridging function between the boundary edges of two different meshes for the latter part of the union operation. I provided visuals for the writeup, slides, and videos. </p>
-<p>Isabel: I worked on part of the remeshing segment of the project, particularly the edge-collapse method. I also attempted to implement intersection detection for the union boolean operation with bounding boxes. Additionally, I assembled the milestone and final videos, the slide decks for the milestone and final, as well as the websites for the milestone and final due dates.</p>
+<hr width="65%" size=2 color="gray">
+
+<p>Vi: I worked on the implementation of the remeshing and simplification algorithm. I also worked on the check for cases where the edges shouldn't be collapsed. For constructive solid geometry, I worked on implementing UI functions like moving the whole object by clicking and dragging as well as selecting meshes as mesh A and mesh B. I've also made the bridging function between the boundary edges of two different meshes for the latter part of the union operation. I provided visuals for the writeup, slides, and videos. </p>
+<p>Isabel: I worked on part of the remeshing segment of the project, particularly the edge-collapse method. I also implemented the intersection detection for the union boolean operation with bounding boxes. Additionally, I assembled the milestone and final videos, the slide decks for the milestone and final, as well as the websites for the milestone and final reports.</p>
 <p>Disclaimer: Simplification was not initially in our proposal but we decided it may help balance the two meshes before boolean operations. Also, it was a last ditch effort to save our grade since we had the functions we needed from implemented remesh. </p>
 
-<hr width="100%">
-<h2 align="center">Past Presentations</h2>
-<ul>
-  <li><a href="https://docs.google.com/a/berkeley.edu/presentation/d/1wxPgU0KzNCgDrys4l72mWxF8QDAfEIIpjv0Bfp44RkY/edit?usp=sharing">Final Presentation Slide Deck</a></li>
-  <li><a href="https://docs.google.com/a/berkeley.edu/presentation/d/1rcjg3UMeoB3WYiugZ1kypV_m9j8dtSP6Yk1M7R33rUY/edit?usp=sharing">Milestone Presentation Slide Deck</a></li>
-</ul>
-
-
-
-<hr width="100%">
+<hr size="10" color="gray" width=100%>
 
 <h2 align="center">Past Videos</h2>
-<iframe width="1020" height="630" src="https://www.youtube.com/embed/f6-_4JrViRE" frameborder="0" allowfullscreen></iframe>
-<iframe width="1020" height="630" src="https://www.youtube.com/embed/5G_U7at4Y38" frameborder="0" allowfullscreen></iframe>
+<hr width="65%" size=2 color="gray">
 
+<div align="center">
+  <h3 align="center">Final Video</h3>
+  <iframe width="510" height="315" src="https://www.youtube.com/embed/f6-_4JrViRE" frameborder="0" allowfullscreen></iframe>
+
+  <h3 align="center">Milestone Video</h3>
+
+  <iframe width="510" height="315" src="https://www.youtube.com/embed/5G_U7at4Y38" frameborder="0" allowfullscreen></iframe>
+</div>
+
+
+<hr size="10" color="gray" width=100%>
+<h2 align="center">Past Presentations</h2>
+<hr width="65%" size=2 color="gray">
+
+  <div align="center">
+    <h3 align="center">Final Presentation Slide Deck</h3>
+    <iframe src="https://docs.google.com/presentation/d/1wxPgU0KzNCgDrys4l72mWxF8QDAfEIIpjv0Bfp44RkY/embed?start=false&loop=true&delayms=5000" frameborder="0" width="960" height="569" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
+
+    <h3 align="center">Milestone Presentation Slide Deck</h3>
+    <iframe src="https://docs.google.com/presentation/d/1rcjg3UMeoB3WYiugZ1kypV_m9j8dtSP6Yk1M7R33rUY/embed?start=false&loop=true&delayms=5000" frameborder="0" width="960" height="569" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
+  </div>
+<br>
+<hr size="10" color="gray" width=100%>
+
+<h2 align="center">Thanks</h2>
+<hr width="65%" size=2 color="gray">
+
+<p>
+  We wanted to thank Professor Ren Ng and all the TAs for their help with the project and the course. The projects were very well scoped and were both fun and interesting. 
+</p>
 
 </div>
 </body>
