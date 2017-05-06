@@ -99,7 +99,8 @@
     We read a variety of papers on how to implement this section, however, most papers represent meshes implicitly. Because we represent the mesh explicitly, we had to find our own method. At a high level, we would find the intersections of the two meshes, delete the intersections, and then bridge the boundary faces left over from deleteing the intersections.
   </p>
   <p>
-    Given two input meshes (meshA and meshB), we output one mesh that is the union of the two meshes. First, we add all the boundary vertices of meshA and meshB to individual lists. We then bridge these vertices together by creating triangles between two boundary vertices from meshA and the closest boundary vertex from meshB. Then, we build another triangle using two boundary vertices from meshB (one of which is from the first triangle) and a boundary vertex from meshA. We do this for all boundary vertices of meshA and meshB. Next, we add the nonboundary faces of meshA and meshB to the polymesh by creating triangles with the three vertices of each face. Then, we merge all the vertices of the polymesh. Finally, we delete meshA and meshB and return our newly built mesh.
+    Since we would be working with merging two meshes and the boundaries couldn't be traversed as expected, we decided to work with the polymesh and mesh nodes instead of the halfedge data structure.
+    Given two input meshes (meshA and meshB), we output one mesh that is the union of the two meshes. First, we find the intersections between meshA and meshB, delete the faces that are within the intersection, and put them into a polymesh. Then, we add all the boundary vertices of meshA and meshB to individual lists. We then bridge these vertices together by creating triangles between two boundary vertices from meshA and the closest boundary vertex from meshB. Then, we build another triangle using two boundary vertices from meshB (one of which is from the first triangle) and a boundary vertex from meshA. We do this for all boundary vertices of meshA and meshB. Next, we add the nonboundary faces of meshA and meshB to the polymesh by creating triangles with the three vertices of each face. Then, we merge all the vertices of the polymesh. Finally, we delete meshA and meshB and return our newly built mesh.
   </p>
 
   <h3>Problems We Faced</h3>
@@ -117,12 +118,13 @@
 <!-- Next Section -->
 <h3>Mesh Simplification</h3>
   <p>
-    Mesh simplification is especially useful in cases where high resolution meshes are unnecessary or computationally expensive to process. By simplifying the mesh and decreasing the number of polygons within a mesh, the operation aims to increase efficiency while maintaining quality similar to the input mesh. We used Garland & Heckbert's paper on <a href="http://cseweb.ucsd.edu/~ravir/190/2016/garland97.pdf">Surface Simplification Using Quadric Error Metrics</a> algorithm for our simplification implementation. 
+    Mesh simplification is especially useful in cases where high resolution meshes are unnecessary or computationally expensive to process. By simplifying the mesh and decreasing the number of polygons within a mesh, the operation aims to increase efficiency while maintaining quality similar to the input mesh. This helps with boolean operations in the case that the two meshes we want to boolean are not similar enough in terms of the number of faces near the intersection. We used Garland & Heckbert's paper on <a href="http://cseweb.ucsd.edu/~ravir/190/2016/garland97.pdf">Surface Simplification Using Quadric Error Metrics</a> algorithm for our simplification implementation. 
   </p>
   <p>
-  First, we iterate through all the faces of the mesh and calculate each face's quadric error matrix which can be used to calculate the distance between the face and a point. Next, we set the quadric of the vertices by summing the quadric error of all faces surrounding the vertex. Then, we set the quadric error of the edges by summing the quadric error of both of the edge's vertices. We continue by finding the point along the edge that minimizes the quadric error and collapse edges with the smallest cost. After collapsing, we go back and sum up the vertex's quadric error matrix again because the neighbors have now changed as well as the neighboring edges' quadric error matrices.
+  First, we iterate through all the faces of the mesh and calculate each face's quadric error matrix which can be used to calculate the distance between the face and a point. Next, we set the quadric of the vertices by summing the quadric error of all faces surrounding the vertex. Then, we set the quadric error of the edges by summing the quadric error of both of the edge's vertices. We continue by finding the point along the edge that minimizes the quadric error and collapse edges with the smallest cost. After collapsing 20% of the triangles present in the mesh, we stop. Finally, we go back and sum up the vertex's quadric error matrix again because the neighbors have now changed as well as the neighboring edges' quadric error matrices.
   </p>
-
+  <h3>Problems We Faced</h3>
+  <p>There were virtually no problems here as most of our problems were with collapsing in the remesh algorithm.</p>
 
 
 
